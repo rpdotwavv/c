@@ -1,1 +1,0 @@
-/*Write a Celsius to Fahrenheit table*/
