@@ -1,0 +1,5 @@
+TO COMPILE:
+gcc main.c -o main.exe -I "C:\SDL3-devel-3.2.20-mingw\SDL3-3.2.20\x86_64-w64-mingw32\include" -L "C:\SDL3-devel-3.2.20-mingw\SDL3-3.2.20\x86_64-w64-mingw32\lib" -lSDL3
+
+TO LAUNCH APP:
+./main.exe
