@@ -3,3 +3,4 @@ gcc main.c -o main.exe -I "C:\SDL3-devel-3.2.20-mingw\SDL3-3.2.20\x86_64-w64-min
 
 TO LAUNCH APP:
 ./main.exe
+// or just open in OS folder explorer
