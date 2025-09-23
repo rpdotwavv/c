@@ -8,7 +8,7 @@ unsigned getBits(unsigned x, int p, int n, int y)
 	maskR = (~0 >> (p + 1 - n));
 	maskT = maskL | maskR;
 
-	xMasked = x & maskT
+	xMasked = x & maskT;
 
 	z = y & (~(~0 << n));
 
@@ -27,7 +27,7 @@ unsigned getBits(unsigned x, int p, int n, int y)
 
 int main()
 {
-	unsigned bits = 135
+	unsigned bits = 135;
 	int p = 5, n = 2, y = 3;
 
 	printf("New byte = %u\n", getBits(bits));
@@ -35,3 +35,4 @@ int main()
 	return 0;
 
 }
+
