@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5x8 Toggle Grid</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .main-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .shift-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .shift-buttons {
+            display: flex;
+            gap: 5px;
+            height: 60px;
+            align-items: center;
+        }
+
+        .shift-btn {
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #6c757d;
+        }
+
+        .shift-btn:hover {
+            background-color: #5a6268;
+        }
+
+        .input-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .decimal-input {
+            width: 80px;
+            height: 60px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .decimal-input:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 10px;
+            max-width: 640px;
+        }
+
+        .box {
+            width: 60px;
+            height: 60px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            background-color: #fff;
+        }
+
+        .box:hover {
+            border-color: #007bff;
+            transform: scale(1.05);
+        }
+
+        .box.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #0056b3;
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .reset-btn {
+            background-color: #dc3545;
+        }
+
+        .reset-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>5×8 Toggle Grid</h1>
+        <div class="main-container">
+            <div class="input-column">
+                <input type="number" class="decimal-input" placeholder="0" min="0" max="255" data-row="0">
+                <input type="number" class="decimal-input" placeholder="0" min="0" max="255" data-row="1">
+                <input type="number" class="decimal-input" placeholder="0" min="0" max="255" data-row="2">
+                <input type="number" class="decimal-input" placeholder="0" min="0" max="255" data-row="3">
+                <input type="number" class="decimal-input" placeholder="0" min="0" max="255" data-row="4">
+            </div>
+            <div class="grid" id="grid"></div>
+            <div class="shift-column">
+                <div class="shift-buttons">
+                    <button class="shift-btn" onclick="shiftRow(0, 'left')" title="Shift Left">←</button>
+                    <button class="shift-btn" onclick="shiftRow(0, 'right')" title="Shift Right">→</button>
+                </div>
+                <div class="shift-buttons">
+                    <button class="shift-btn" onclick="shiftRow(1, 'left')" title="Shift Left">←</button>
+                    <button class="shift-btn" onclick="shiftRow(1, 'right')" title="Shift Right">→</button>
+                </div>
+                <div class="shift-buttons">
+                    <button class="shift-btn" onclick="shiftRow(2, 'left')" title="Shift Left">←</button>
+                    <button class="shift-btn" onclick="shiftRow(2, 'right')" title="Shift Right">→</button>
+                </div>
+                <div class="shift-buttons">
+                    <button class="shift-btn" onclick="shiftRow(3, 'left')" title="Shift Left">←</button>
+                    <button class="shift-btn" onclick="shiftRow(3, 'right')" title="Shift Right">→</button>
+                </div>
+                <div class="shift-buttons">
+                    <button class="shift-btn" onclick="shiftRow(4, 'left')" title="Shift Left">←</button>
+                    <button class="shift-btn" onclick="shiftRow(4, 'right')" title="Shift Right">→</button>
+                </div>
+            </div>
+        </div>
+        <div class="controls">
+            <button onclick="clearAll()">Clear All</button>
+            <button onclick="fillAll()" class="reset-btn">Fill All</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize the grid state
+        let gridState = Array(5).fill().map(() => Array(8).fill(0));
+
+        // Create the grid
+        function createGrid() {
+            const grid = document.getElementById('grid');
+            
+            for (let row = 0; row < 5; row++) {
+                for (let col = 0; col < 8; col++) {
+                    const box = document.createElement('div');
+                    box.className = 'box';
+                    box.textContent = '0';
+                    box.dataset.row = row;
+                    box.dataset.col = col;
+                    
+                    box.addEventListener('click', function() {
+                        toggleBox(row, col, this);
+                    });
+                    
+                    grid.appendChild(box);
+                }
+            }
+
+            // Add event listeners to decimal inputs
+            document.querySelectorAll('.decimal-input').forEach(input => {
+                input.addEventListener('input', function() {
+                    const row = parseInt(this.dataset.row);
+                    const value = parseInt(this.value) || 0;
+                    setRowFromDecimal(row, Math.min(value, 255));
+                });
+            });
+        }
+
+        // Toggle a box between 0 and 1
+        function toggleBox(row, col, element) {
+            gridState[row][col] = 1 - gridState[row][col];
+            element.textContent = gridState[row][col];
+            
+            if (gridState[row][col] === 1) {
+                element.classList.add('active');
+            } else {
+                element.classList.remove('active');
+            }
+
+            // Update the corresponding decimal input
+            updateDecimalInput(row);
+        }
+
+        // Set a row from a decimal value
+        function setRowFromDecimal(row, decimal) {
+            // Convert decimal to 8-bit binary
+            const binary = decimal.toString(2).padStart(8, '0');
+            
+            // Update grid state and visual representation
+            for (let col = 0; col < 8; col++) {
+                const bit = parseInt(binary[col]);
+                gridState[row][col] = bit;
+                
+                const box = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+                box.textContent = bit;
+                
+                if (bit === 1) {
+                    box.classList.add('active');
+                } else {
+                    box.classList.remove('active');
+                }
+            }
+        }
+
+        // Update decimal input based on row state
+        function updateDecimalInput(row) {
+            let decimal = 0;
+            for (let col = 0; col < 8; col++) {
+                decimal += gridState[row][col] * Math.pow(2, 7 - col);
+            }
+            
+            const input = document.querySelector(`[data-row="${row}"].decimal-input`);
+            input.value = decimal;
+        }
+
+        // Shift a row left or right
+        function shiftRow(row, direction) {
+            if (direction === 'left') {
+                // Shift left: move all bits left, fill rightmost with 0
+                const firstBit = gridState[row][0];
+                for (let col = 0; col < 7; col++) {
+                    gridState[row][col] = gridState[row][col + 1];
+                }
+                gridState[row][7] = 0;
+            } else {
+                // Shift right: move all bits right, fill leftmost with 0
+                for (let col = 7; col > 0; col--) {
+                    gridState[row][col] = gridState[row][col - 1];
+                }
+                gridState[row][0] = 0;
+            }
+
+            // Update visual representation
+            for (let col = 0; col < 8; col++) {
+                const box = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+                box.textContent = gridState[row][col];
+                
+                if (gridState[row][col] === 1) {
+                    box.classList.add('active');
+                } else {
+                    box.classList.remove('active');
+                }
+            }
+
+            // Update decimal input
+            updateDecimalInput(row);
+        }
+
+        // Clear all boxes to 0
+        function clearAll() {
+            const boxes = document.querySelectorAll('.box');
+            const inputs = document.querySelectorAll('.decimal-input');
+            
+            for (let row = 0; row < 5; row++) {
+                for (let col = 0; col < 8; col++) {
+                    gridState[row][col] = 0;
+                }
+            }
+            
+            boxes.forEach(box => {
+                box.textContent = '0';
+                box.classList.remove('active');
+            });
+
+            inputs.forEach(input => {
+                input.value = '';
+            });
+        }
+
+        // Fill all boxes to 1
+        function fillAll() {
+            const boxes = document.querySelectorAll('.box');
+            const inputs = document.querySelectorAll('.decimal-input');
+            
+            for (let row = 0; row < 5; row++) {
+                for (let col = 0; col < 8; col++) {
+                    gridState[row][col] = 1;
+                }
+            }
+            
+            boxes.forEach(box => {
+                box.textContent = '1';
+                box.classList.add('active');
+            });
+
+            inputs.forEach(input => {
+                input.value = '255';
+            });
+        }
+
+        // Initialize the grid when the page loads
+        createGrid();
+    </script>
+</body>
+</html>
