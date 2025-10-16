@@ -20,14 +20,14 @@ int matchStrings(char char1, char char2){
 }
 
 int main(){
-  char myString[] = "tugs";
+  char myString[] = "tuga";
   char myString2[] = "guts";
   int loopCount = 0;
   
   // first test is if boths strings are same length
   while(true) {
     if (strlen(myString) != strlen(myString2)){
-      printf("These strings are not the same length!");
+      printf("Oppsies! These strings are not the same length!");
       break;
     }
 
@@ -39,24 +39,18 @@ int main(){
     for(int i = 0; i <= strlen(myString); i++){
       if (matchStrings(myString[i], myString2[i])){
         loopCount++;
+          if (loopCount == (strlen(myString) + 1)){
+          printf("Woot! These strings ARE anagrams!");
+          break;
+        }
         continue;
       }
       else {
+        printf("Bummer! These strings are NOT anagrams!");
         break;
       }
     }
-   
-    // if statement makes sure all characters matched by counting 
-    // times completed from the matchString function
-    if (loopCount == (strlen(myString) + 1)){
-      printf("These strings are anagrams!");
-      break;
-    }
-    else {
-      printf("These strings are not anagrams!");
-      break;
-    }
+    break;
   }
-  
   return 0; 
 }
