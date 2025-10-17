@@ -5,7 +5,6 @@ int main(){                                 // push    rbp
                                             //  mov     rbp, rsp
                                             //  mov     dword ptr [rbp - 4], 0
 
-
   char ogChar = 'H';                        //  mov     byte ptr [rbp - 5], 72
   char newChar;
   if (ogChar < 90){                         //  movsx   eax, byte ptr [rbp - 5]
@@ -24,5 +23,6 @@ int main(){                                 // push    rbp
                                             //  pop     rbp
 
                                             //  ret
+
 
 
