@@ -11,6 +11,7 @@ int main(){                                 // push    rbp
   if (ogChar < 90){                         //  movsx   eax, byte ptr [rbp - 5]
                                             //  cmp     eax, 90
                                             //  jge     .LBB0_2
+    
     return newChar = ogChar + 32;           //  movsx   eax, byte ptr [rbp - 5]
                                             //  add     eax, 32
                                             //  mov     byte ptr [rbp - 6], al
@@ -23,4 +24,5 @@ int main(){                                 // push    rbp
                                             //  pop     rbp
 
                                             //  ret
+
 
