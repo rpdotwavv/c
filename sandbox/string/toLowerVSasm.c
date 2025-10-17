@@ -15,7 +15,8 @@ int main(){                                 // push    rbp
                                             //  mov     dword ptr [rbp - 4], eax
                                             //  jmp     .LBB0_3
   }
-  return 0;                                 //  mov     dword ptr [rbp - 4], 0
-}                                           //  mov     eax, dword ptr [rbp - 4]
+  return 0;  // .LBB0_2                     //  mov     dword ptr [rbp - 4], 0
+}            // .LBB0_3                     //  mov     eax, dword ptr [rbp - 4]
                                             //  pop     rbp
+
                                             //   ret
